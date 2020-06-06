@@ -1,0 +1,24 @@
+{
+  "name": "note-it",
+  "version": "1.0.0",
+  "description": "note-taking web app for videos",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npm run start --prefix server",
+    "client": "npm run start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdollent/note-it.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdollent/note-it/issues"
+  },
+  "homepage": "https://github.com/rdollent/note-it#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
