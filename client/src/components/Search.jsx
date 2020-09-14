@@ -42,20 +42,21 @@ const Search = (props) => {
       console.log(videoId);
       props.history.push({
         pathname: '/video',
-        state: {videoId: videoId}
+        state: {videoId: videoId},
+        history: props.history
       });
   }
 
   const populateVids = () => {
     if(idState !== 'initial state') {
-      return idState.map( item => {
+      return idState.map( (item, ind) => {
         source = `https://www.youtube.com/embed/${item.id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
 
 
         return (
           React.createElement(
             'div', 
-            {className: 'video-boxes'}, 
+            {className: 'video-boxes', key: `video-${ind}`}, 
             React.createElement(
               'iframe', 
               {id: `vid-${item.id.videoId}`, width: '320', height: '240', allowFullScreen: 'allowFullScreen', src: source},
