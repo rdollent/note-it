@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 // notes
 // https://stackoverflow.com/questions/3700326/decode-amp-back-to-in-javascript
 
-const Search = () => {
+const Search = (props) => {
 
   const [idState, setId] = useState('initial state');
 
@@ -16,7 +16,7 @@ const Search = () => {
 
 
   // source https://medium.com/@cmurphy580/a-quick-walkthrough-of-the-youtube-api-javascript-4f0b0a13f988
-  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&key=${api_key}&q=`;
+  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=${api_key}&type=video&q=`;
 
   let source = `https://www.youtube.com/embed/`;
   
@@ -36,6 +36,15 @@ const Search = () => {
   useEffect(() => {
     console.log(idState);
   });
+
+  const redirect = (e) => {
+      let videoId = e.currentTarget.parentNode.getElementsByTagName('iframe')[0].id.substring(4);
+      console.log(videoId);
+      props.history.push({
+        pathname: '/video',
+        state: {videoId: videoId}
+      });
+  }
 
   const populateVids = () => {
     if(idState !== 'initial state') {
@@ -64,7 +73,8 @@ const Search = () => {
             ),
             React.createElement(
               'button',
-              {className: 'select-video-btn'},
+              {className: 'select-video-btn',
+              onClick: (e) => redirect(e)},
               'Select'
             )
           

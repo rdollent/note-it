@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 // import { useHistory } from 'react-router';
-import { withRouter, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+// https://stackoverflow.com/questions/43279135/reactjs-router-v4-history-push-not-working
+import { withRouter } from 'react-router';
 
 const Home = () => {
     let history = useHistory();
@@ -14,7 +17,7 @@ const Home = () => {
 
     return (
         <div className='App'>
-            <button onClick={ClickSearch}>Search</button>
+            <button onClick={ClickSearch} history={history}>Search</button>
         </div>
       );
 }
