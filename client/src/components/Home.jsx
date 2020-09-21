@@ -6,11 +6,18 @@ import { useHistory } from 'react-router-dom';
 // https://stackoverflow.com/questions/43279135/reactjs-router-v4-history-push-not-working
 import { withRouter } from 'react-router';
 
+import usePersistedState from '../custom-hooks/state-local-storage';
+
 const Home = () => {
     let history = useHistory();
 
+    const [localStorageState, setLocalStorage] = usePersistedState('', 'initial state');
+
+    
+    useEffect(() => {
+        setLocalStorage('initial state');
+    });
     const ClickSearch = () => {
-        
         // e.preventDefault();
         history.push('/search');
     }

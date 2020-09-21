@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
+import usePersistedState from '../custom-hooks/state-local-storage';
+
 
 
 
@@ -9,14 +11,16 @@ import { useEffect } from 'react';
 
 const Search = (props) => {
 
-  const [idState, setId] = useState('initial state');
+  // const [idState, setId] = useState('initial state');
+
+  const [localStorageState, setLocalStorage] = usePersistedState('', 'initial state');
 
   
   const api_key = 'AIzaSyAPnRBM3LfI4tRDQtiP2iUmgh8O8ngSOug';
 
 
   // source https://medium.com/@cmurphy580/a-quick-walkthrough-of-the-youtube-api-javascript-4f0b0a13f988
-  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&key=${api_key}&type=video&q=`;
+  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&key=${api_key}&type=video&q=`;
 
   let source = `https://www.youtube.com/embed/`;
   
@@ -27,14 +31,14 @@ const Search = (props) => {
       const query = document.getElementById('search').value;
       url+=query;
       fetch(url).then(response => response.json()).then(data => { 
-        console.log(data);
-        setId(data.items);
+        // setId(data.items);
+        setLocalStorage(data.items);
         // source += `${data.items[0].id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
       });
   }
 
   useEffect(() => {
-    console.log(idState);
+    console.log(localStorageState);
   });
 
   const redirect = (e) => {
@@ -48,8 +52,8 @@ const Search = (props) => {
   }
 
   const populateVids = () => {
-    if(idState !== 'initial state') {
-      return idState.map( (item, ind) => {
+    if(localStorageState !== 'initial state') {
+      return localStorageState.map( (item, ind) => {
         source = `https://www.youtube.com/embed/${item.id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
 
 
