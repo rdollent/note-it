@@ -20,7 +20,7 @@ const Search = (props) => {
 
 
   // source https://medium.com/@cmurphy580/a-quick-walkthrough-of-the-youtube-api-javascript-4f0b0a13f988
-  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&key=${api_key}&type=video&q=`;
+  let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&key=${api_key}&type=video&q=`;
 
   let source = `https://www.youtube.com/embed/`;
   
@@ -32,6 +32,9 @@ const Search = (props) => {
       url+=query;
       fetch(url).then(response => response.json()).then(data => { 
         // setId(data.items);
+        console.log(data);
+        // https://developers.google.com/youtube/v3/guides/implementation/pagination
+        // next page token
         setLocalStorage(data.items);
         // source += `${data.items[0].id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
       });
@@ -45,7 +48,7 @@ const Search = (props) => {
       let videoId = e.currentTarget.parentNode.getElementsByTagName('iframe')[0].id.substring(4);
       console.log(videoId);
       props.history.push({
-        pathname: '/video',
+        pathname: '/videopage',
         state: {videoId: videoId},
         history: props.history
       });
