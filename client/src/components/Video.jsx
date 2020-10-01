@@ -73,14 +73,34 @@ const Video = (props) => {
   //    The function indicates that when playing a video (state=1),
   //    the player should play for six seconds and then stop.
   let done = false;
+
+  // player states
+  // YT.PlayerState.ENDED
+  // YT.PlayerState.PLAYING
+  // YT.PlayerState.PAUSED
+  // YT.PlayerState.BUFFERING
+  // YT.PlayerState.CUED
   const onPlayerStateChange = (event) => {
-    if (event.data == window.YT.PlayerState.PLAYING && !done) {
-      setTimeout(stopVideo, 6000);
-      done = true;
+    switch (event.data ) {
+      case window.YT.PlayerState.PLAYING:
+        if (!done) {
+          setTimeout(stopVideo, 6000);
+        done = true;
+        }
+        break;
+      
+      case window.YT.PlayerState.PAUSED:
+        // in seconds
+        console.log(player.getCurrentTime());
+        break;
     }
+
+
   }
   const stopVideo = () => {
     player.stopVideo();
+    console.log(window.YT.PlayerState);
+    console.log(player);
   }
 
   const goBack = () => {

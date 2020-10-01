@@ -8,6 +8,8 @@ import { withRouter } from 'react-router';
 
 import usePersistedState from '../custom-hooks/state-local-storage';
 
+
+
 const Home = () => {
     let history = useHistory();
 

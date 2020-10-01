@@ -46,6 +46,7 @@ const TextEditor = (props) => {
     );
 
     
+    
     return (
         <div>
             <div id='editor'></div>

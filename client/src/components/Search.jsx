@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-import usePersistedState from '../custom-hooks/state-local-storage';
+// import usePersistedState from '../custom-hooks/state-local-storage';
 
-
+import { useList, useChangeList } from '../custom-hooks/ListProvider';
 
 
 // notes
@@ -13,7 +13,7 @@ const Search = (props) => {
 
   // const [idState, setId] = useState('initial state');
 
-  const [localStorageState, setLocalStorage] = usePersistedState('', 'initial state');
+  // const [localStorageState, setLocalStorage] = usePersistedState('', 'initial state');
 
   
   const api_key = 'AIzaSyAPnRBM3LfI4tRDQtiP2iUmgh8O8ngSOug';
@@ -23,10 +23,15 @@ const Search = (props) => {
   let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&key=${api_key}&type=video&q=`;
 
   let source = `https://www.youtube.com/embed/`;
+
+  const list = useList();
+  const changeList = useChangeList();
   
 
   const getVideo = () => {
       console.log('connected!');
+
+
       
       const query = document.getElementById('search').value;
       url+=query;
@@ -35,13 +40,15 @@ const Search = (props) => {
         console.log(data);
         // https://developers.google.com/youtube/v3/guides/implementation/pagination
         // next page token
-        setLocalStorage(data.items);
+        // setLocalStorage(data.items);
+        changeList(data.items);
         // source += `${data.items[0].id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
       });
   }
 
   useEffect(() => {
-    console.log(localStorageState);
+    // console.log('this is localstorage ', localStorageState);
+    console.log('this is list context ', list);
   });
 
   const redirect = (e) => {
@@ -55,10 +62,11 @@ const Search = (props) => {
   }
 
   const populateVids = () => {
-    if(localStorageState !== 'initial state') {
-      return localStorageState.map( (item, ind) => {
+    // if(localStorageState !== 'initial state') {
+    if(list !== 'initial state') {
+      // return localStorageState.map( (item, ind) => {
+      return list.map( (item, ind) => {
         source = `https://www.youtube.com/embed/${item.id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
-
 
         return (
           React.createElement(
