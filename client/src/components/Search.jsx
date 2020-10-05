@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 
 import { useList, useChangeList } from '../custom-hooks/ListProvider';
 
+import { useNote, useChangeNote } from '../custom-hooks/NoteProvider';
+
 
 // notes
 // https://stackoverflow.com/questions/3700326/decode-amp-back-to-in-javascript
@@ -24,8 +26,14 @@ const Search = (props) => {
 
   let source = `https://www.youtube.com/embed/`;
 
+  // global state for search results using React Context API
   const list = useList();
   const changeList = useChangeList();
+
+  // global state for note-taking information using React Context API
+  const note = useNote();
+  // note: note is object type
+  const changeNote = useChangeNote();
   
 
   const getVideo = () => {
@@ -59,6 +67,7 @@ const Search = (props) => {
         state: {videoId: videoId},
         history: props.history
       });
+      changeNote('videoId', videoId);
   }
 
   const populateVids = () => {
@@ -66,7 +75,8 @@ const Search = (props) => {
     if(list !== 'initial state') {
       // return localStorageState.map( (item, ind) => {
       return list.map( (item, ind) => {
-        source = `https://www.youtube.com/embed/${item.id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0`;
+        source = `https://www.youtube.com/embed/${item.id.videoId}?showinfo=0&rel=0&modestbranding=1&fs=0&version=3&enablejsapi=1&widgetid=1`;
+        // &origin=https://localhost:3000`;
 
         return (
           React.createElement(
