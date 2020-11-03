@@ -45,7 +45,7 @@ const Search = (props) => {
       url+=query;
       fetch(url).then(response => response.json()).then(data => { 
         // setId(data.items);
-        console.log(data);
+        // console.log(data);
         // https://developers.google.com/youtube/v3/guides/implementation/pagination
         // next page token
         // setLocalStorage(data.items);
@@ -56,18 +56,24 @@ const Search = (props) => {
 
   useEffect(() => {
     // console.log('this is localstorage ', localStorageState);
-    console.log('this is list context ', list);
+    // console.log('this is list context ', list);
   });
 
   const redirect = (e) => {
       let videoId = e.currentTarget.parentNode.getElementsByTagName('iframe')[0].id.substring(4);
       console.log(videoId);
-      props.history.push({
-        pathname: '/videopage',
-        state: {videoId: videoId},
-        history: props.history
-      });
       changeNote('videoId', videoId);
+
+      window.setTimeout( () => {
+        props.history.push({
+          pathname: '/videopage',
+          // state: {videoId: videoId},
+          history: props.history
+        });
+
+      }, 100);
+      
+      
   }
 
   const populateVids = () => {

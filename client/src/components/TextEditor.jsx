@@ -11,6 +11,8 @@ import Quill from 'quill';
 
 const TextEditor = (props) => {
 
+    
+
     // https://quilljs.com/docs/modules/toolbar/
     let toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -40,16 +42,25 @@ const TextEditor = (props) => {
 
     }
 
-    useEffect(() =>{
-        let quill = new Quill('#editor', options);
+    useEffect(
+        () => {
+            let quill = new Quill('#editor', options);
         }
     );
+    
+    // window.addEventListener('DOMContentLoaded',(() => {
+        // let quill = new Quill('#editor', options);
+
+    // }));
+    
+
+    
 
     
     
     return (
         <div>
-            <div id='time'></div>
+            <div id='time'>{props.currentTime}</div>
             <div id='editor'></div>
         </div>
         

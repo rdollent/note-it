@@ -9,10 +9,13 @@ import { useNote, useChangeNote } from '../custom-hooks/NoteProvider';
 
 
 const Video = (props) => {
+  
+  console.log('rendered!');
+  console.log(props);
 
-  let history = useHistory();
+  // let history = useHistory();
 
-  let player;
+  // let player;
   // let YT;
   // let location = useLocation();
   // let videoId = location.state.videoId;
@@ -20,77 +23,84 @@ const Video = (props) => {
   // global state for note-taking information using React Context API
   const note = useNote();
   // note: note is object type
-  const changeNote = useChangeNote();
+  // const changeNote = useChangeNote();
 
   let videoId = note.videoId;
 
-  let loaded = false;
+  console.log('videoId inside video ', videoId);
 
-  useEffect(() => {
+  // if(window.YT) {
+    // delete window.YT;
+    // window.YT = undefined;
+    // window.onYouTubeIframeAPIReady = undefined;
+    // window.onYTReady = undefined;
+
+    // delete window.YT;
+    // delete window.onYouTubeIframeAPIReady;
+    // delete window.onYTReady;
+  // }
+  // useEffect(() => {
    // https://stackoverflow.com/questions/54017100/how-to-integrate-youtube-iframe-api-in-reactjs-solution
       // check if api is loaded
 
-      console.log('videoId inside video component ', videoId);
-      if(!loaded) {
-      if (!window.YT) { // if not, load
+      // console.log('videoId inside video component ', videoId);
+      // if(!loaded) {
+      // console.log('not loaded');
+      // setInterval(() => { 
+        if (!window.YT) {
+         // if not, load
         // 2. This code loads the IFrame Player API code asynchronously.
+        if(document.getElementById('YT-script')) {
+          document.getElementById('YT-script').remove();
+        } 
         const tag = document.createElement('script');
-  
         tag.id = 'YT-script';
         tag.async = true;
-        // tag.crossOrigin = true;
-  
+        tag.crossorigin = '';
         tag.src = 'https://www.youtube.com/iframe_api';
-  
-
-  
         let firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-  
-        // document.body.appendChild(tag);
-  
-      } else {
-        loadVideo();
+        document.body.appendChild(tag);
+        // onYouTubeIframeAPIReady will load the video after the script is loaded
+        // window.onYouTubeIframeAPIReady = loadVideo;
+
+      // } 
+      // else {
+        // onYouTubeIframeAPIReady will load the video after the script is loaded
+        // window.onYouTubeIframeAPIReady = loadVideo;
+        // loadVideo();
       }
-      loaded = true;
-    }
 
+              
+    // }, 100);
+    //   loaded = true;
+    // }
 
-
+  // useEffect(() => {
+  //   loadVideo();
+  // });
+  // window.addEventListener('DOMContentLoaded', () => {
+  //   loadVideo();
+  // });
  
 
     
-  });
+  // });
 
   
      // 3. This function creates an <iframe> (and YouTube player)
   //    after the API code downloads.
 
-
-  const loadVideo = () => {
+  
+  window.onYouTubeIframeAPIReady = () => {
     // const id  = videoId;
+    
 
-    // the Player object is created uniquely based on the id in props
-    player = new window.YT.Player('player', {
-      host: 'https://www.youtube.com',
-      height: '390',
-      width: '640',
-      videoId: videoId,
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
-      },
-      playerVars: {rel: 0}
-      //  origin: 'https://localhost:3000', widget_referrer: window.location.href
-    });
-  };
-
-
- 
-
+    
     // 4. The API will call this function when the video player is ready.
     const onPlayerReady = (event) => {
-      event.target.playVideo();
+      // event.target.mute();
+      // event.target.playVideo();
     }
 
 
@@ -118,50 +128,68 @@ const Video = (props) => {
       
       case window.YT.PlayerState.PAUSED:
         // in seconds
-        console.log('current note state is ', note);
-        console.log(player.getCurrentTime());
-        changeNote('currentTime', player.getCurrentTime());
-        console.log('current note state is ', note);
+        // console.log(player.getCurrentTime());
+        let currTime = player.getCurrentTime();
+        // changeNote('currentTime', player.getCurrentTime());
+        props.changeState(currTime);
+        // setTimeout(console.log('current note state is ', note), 3000);
         break;
     }
-
-     
-
   }
-  const stopVideo = () => {
-    player.stopVideo();
-    console.log(window.YT.PlayerState);
-    console.log(player);
-  }
+
+    // the Player object is created uniquely based on the id in props
+    const player = new window.YT.Player('player', {
+      host: 'https://www.youtube.com',
+      height: '390',
+      width: '640',
+      videoId: videoId,
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      },
+      playerVars: {rel: 0}
+      //  origin: 'https://localhost:3000', widget_referrer: window.location.href
+    });
+  };
+
+
+ 
+
+
+  // const stopVideo = () => {
+  //   player.stopVideo();
+  //   console.log(window.YT.PlayerState);
+  //   console.log(player);
+  // }
     
 
 
 
   
 
-  const goBack = () => {
-    console.log('goBack');
-    history.push('/search');
-  }
-
-
 
 
 
   // onYouTubeIframeAPIReady will load the video after the script is loaded
-  window.onYouTubeIframeAPIReady = loadVideo;
+  // window.onYouTubeIframeAPIReady = loadVideo;
+
+  console.log('window YT', window.YT);
+
 
 
   return (
     <div id='video'>
-
         <div id="player">
-      
         </div>
-        <button onClick={goBack}>Back</button>
+
     </div>
   );
 
 }
 
-export default withRouter(Video);
+
+const VideoMemo = React.memo(Video);
+
+// export default withRouter(VideoMemo);
+
+export default VideoMemo;
